@@ -126,3 +126,61 @@ label {
   width: 400px;
   height: 407px;
 }
+.navg-bar{
+  margin-left: 25%;
+  margin-right: 25%;
+}
+.nav-item{
+  font-weight: bold;
+  margin-left: 50px;
+}
+
+.auth-bar{
+  margin-left: 0px;
+}
+
+.signup-bar{
+  border:solid #85FFCC;
+  border-radius: 5px;
+  padding-top: -10px;
+  padding-bottom: -10px;
+}
+.signup-bar:hover{
+  background-color: #85FFCC ;
+  transition: 0.4s;
+
+}
+.auth-nav{
+  margin-left: 20px;
+}
+
+.login-link{
+  font-family: 'Open Sans', sans-serif;
+  text-align: right;
+  padding: 0px;
+}
+
+.signup-link{
+  font-family: 'Open Sans', sans-serif;
+  text-align: left;
+  border-radius: 0px 5px 0px 0px;
+  padding: 0px;
+}
+
+.login-link .nav-link{
+  border-radius: 5px 0px 0px 0px;
+  color:#303030;
+}
+
+.signup-link .nav-link {
+  border-radius: 0px 5px 0px 0px;
+  color:#303030;
+}
+
+.login-link .nav-link:hover{
+  background-color:#85FFCC;
+}
+
+.signup-link .nav-link:hover{
+  background-color: #85FFCC;
+}

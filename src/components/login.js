@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -82,6 +83,20 @@ export default class Login extends Component {
   render() {
     return (
       <div className="col-md-12 login-container">
+        <div className="auth-nav">
+          <div className="row">
+            <div className="col-md-5 login-link">
+              <Link to={"/login"} className="nav-link" style={{backgroundColor : '#85FFCC'}}>
+                  Login
+              </Link>
+            </div>
+            <div className="col-md-5 signup-link">
+              <Link to={"/register"} className="nav-link">
+                  S'inscrire
+              </Link>
+            </div>
+          </div>  
+        </div>
         <div className="row">
           <div className="col-md-5 compImage">
             <img src="./images/doctor illustration.png"/>
