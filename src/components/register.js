@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import Select from "react-validation/build/select";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
 import AuthService from "../services/auth-service";
+import { Container } from "react-bootstrap";
 
 const required = value => {
   if (!value) {
@@ -54,11 +56,13 @@ export default class Register extends Component {
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeRole = this.onChangeRole.bind(this);
 
     this.state = {
       username: "",
       email: "",
       password: "",
+      role: [],
       successful: false,
       message: ""
     };
@@ -82,6 +86,12 @@ export default class Register extends Component {
     });
   }
 
+  onChangeRole(e){
+    this.setState({
+      role: e.target.value
+    })
+  }
+
   handleRegister(e) {
     e.preventDefault();
 
@@ -96,7 +106,8 @@ export default class Register extends Component {
       AuthService.register(
         this.state.username,
         this.state.email,
-        this.state.password
+        this.state.password,
+        this.state.role
       ).then(
         response => {
           this.setState({
@@ -123,6 +134,7 @@ export default class Register extends Component {
 
   render() {
     return (
+      <Container>
       <div className="col-md-12 login-container">
         <div className="auth-nav">
           <div className="row">
@@ -191,6 +203,20 @@ export default class Register extends Component {
                   </div>
 
                   <div className="form-group">
+                    <Select
+                      className="form-control"
+                      name="role"
+                      value={this.state.role}
+                      onChange={this.onChangeRole}
+                      validations={[required]}
+                    >
+                      <option>Crée un compte autant que :</option>
+                      <option value={['user']}>Patient</option>
+                      <option value={['doctor']}>Doctor</option>
+                    </Select>
+                  </div>
+
+                  <div className="form-group">
                     <button  className="btn btn-primary btn-block login-button">S'inscrire</button>
                   </div>
                 </div>
@@ -220,6 +246,7 @@ export default class Register extends Component {
           </div>
         </div>
       </div>
+      </Container>
     );
   }
 }
