@@ -22,7 +22,7 @@ class NavigationBar extends React.Component {
         if (user) {
             this.setState({
             currentUser: user,
-            showDocBoard: user.roles.includes("ROLE_DOCTOR"),
+            showDoctorBoard: user.roles.includes("ROLE_DOCTOR"),
             });
         }
     }
@@ -58,11 +58,11 @@ class NavigationBar extends React.Component {
                         </li>
 
                         {showDoctorBoard && (
-                        <li className="nav-item">
-                            <Link to={"/doctor"} className="nav-link">
-                            Doctor Board
-                            </Link>
-                        </li>
+                            <li className="nav-item">
+                                <Link to={"/doctor"} className="nav-link">
+                                Doctor Board
+                                </Link>
+                            </li>
                         )}
                     </div>
 

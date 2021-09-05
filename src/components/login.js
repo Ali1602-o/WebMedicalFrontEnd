@@ -60,17 +60,12 @@ export default class Login extends Component {
           this.props.history.push("/profile");
           window.location.reload();
         },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+        error  => {
+          const resMessage = error.response.data.message
 
           this.setState({
             loading: false,
-            message: resMessage
+            message: "Connexion n'a pas réussi, si vous n'avez pas encore un compte essaye d'inscrire"
           });
         }
       );

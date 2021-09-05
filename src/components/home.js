@@ -53,13 +53,34 @@ export default class Home extends Component {
 
         <div className="home-consult-sec">
           <Row>
-            <div className="col-md-4">
+            <div className="col-md-7">
               <img src="images/online_consult.jpg"/>
             </div>
             <div  className="col-md-5 home-consult-sec-caption">
               <p>N'attendez plus !</p>
-              <h4>Consultez votre médecin maintenant.</h4>
+              <h4>Commencez votre consultation maintenant.</h4>
               <Link to={"/"} className="consult-btn">Consulter</Link>
+            </div>
+            
+          </Row>
+        </div>
+
+
+        <div className="consult-find-sec">
+          <Row>
+            <div className="col-md-6 consult-sec">
+              <img src="images/doctor-consult-icon.jpg" class="consult-icon"/>
+              <div class="consult-description">
+                <p>Vous pouvez faire une consultation avec votre médecin facilement en quelques minutes !</p>
+                <Link to={"/"} class="consult-btn-1">Consulter</Link>
+              </div>
+            </div>
+            <div  className="col-md-6 find-sec">
+              <img src="images/find-doctor-icon.png" class="find-icon"/>
+              <div class="find-description">
+                <p>Trouvez votre médecin et prennez un rendez vous.</p>
+                <Link to={"/"} class="find-btn">Trouver</Link>
+              </div>
             </div>
             
           </Row>
