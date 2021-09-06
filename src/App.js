@@ -10,7 +10,9 @@ import Home from "./components/home";
 import Profile from "./components/profile";
 import BoardUser from "./components/user-board";
 import BoardDoctor from "./components/doctor-board";
+import RendezVous from "./components/RendezVous";
 import Footer from "./components/Footer";
+
 
 class App extends Component {
   
@@ -26,6 +28,7 @@ class App extends Component {
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
             <Route path="/doctor" component={BoardDoctor} />
+            <Route path="/rendezvous" component={RendezVous} />
           </Switch>
         </div>
         <Footer/>
