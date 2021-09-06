@@ -12,8 +12,8 @@ import { Container } from "react-bootstrap";
 const required = value => {
   if (!value) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
+      <div class="input-error-message">
+        * Ce champ est obligatoire !
       </div>
     );
   }
@@ -22,28 +22,41 @@ const required = value => {
 const email = value => {
   if (!isEmail(value)) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
+      <div class="input-error-message">
+        * email invalide (ex : user@gmail.com)
+      </div>
+    );
+  }
+};
+
+const vlengthUsername = value => {
+  if (value.length < 3 || value.length > 20) {
+    return (
+      <div class="input-error-message">
+        * nombre de caractéres doit être entre 3 et 20 caractéres !
       </div>
     );
   }
 };
 
 const vusername = value => {
-  if (value.length < 3 || value.length > 20) {
+  var unameRegex = /^[a-z\_]+[0-9a-z]*$/;
+  if (!value.match(unameRegex)) {
     return (
-      <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+      <div class="input-error-message">
+        * username invalide (ex : user_12, user12)
       </div>
     );
   }
 };
 
+
+
 const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
-      <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+      <div class="input-error-message">
+        * nombre de caractéres doit être entre 6 et 40 caractéres !
       </div>
     );
   }
@@ -174,7 +187,7 @@ export default class Register extends Component {
                       placeholder="Entrez votre username"
                       value={this.state.username}
                       onChange={this.onChangeUsername}
-                      validations={[required, vusername]}
+                      validations={[required, vusername,vlengthUsername]}
                     />
                   </div>
 

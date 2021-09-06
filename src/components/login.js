@@ -10,8 +10,8 @@ import AuthService from "../services/auth-service";
 const required = value => {
   if (!value) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
+      <div class="input-error-message">
+        * Ce champ est obligatoire !
       </div>
     );
   }
@@ -61,11 +61,16 @@ export default class Login extends Component {
           window.location.reload();
         },
         error  => {
-          const resMessage = error.response.data.message
+          const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
           this.setState({
             loading: false,
-            message: "Connexion n'a pas réussi, si vous n'avez pas encore un compte essaye d'inscrire"
+            message: "Connexion n'a pas réussi, si vous n'avez pas encore un compte, essaye de le créer !"
           });
         }
       );
