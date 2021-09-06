@@ -59,7 +59,7 @@ export default class Home extends Component {
             <div  className="col-md-5 home-consult-sec-caption">
               <p>N'attendez plus !</p>
               <h4>Commencez votre consultation maintenant.</h4>
-              <Link to={"/"} className="consult-btn">Consulter</Link>
+              <Link to={"/consultations"} className="consult-btn">Consulter</Link>
             </div>
             
           </Row>
@@ -72,7 +72,7 @@ export default class Home extends Component {
               <img src="images/doctor-consult-icon.jpg" class="consult-icon"/>
               <div class="consult-description">
                 <p>Vous pouvez faire une consultation avec votre médecin facilement en quelques minutes !</p>
-                <Link to={"/"} class="consult-btn-1">Consulter</Link>
+                <Link to={"/consultations"} class="consult-btn-1">Consulter</Link>
               </div>
             </div>
             <div  className="col-md-6 find-sec">

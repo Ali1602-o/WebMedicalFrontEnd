@@ -11,6 +11,7 @@ import Profile from "./components/profile";
 import BoardUser from "./components/user-board";
 import BoardDoctor from "./components/doctor-board";
 import RendezVous from "./components/RendezVous";
+import Consultations from "./components/consultations";
 import Footer from "./components/Footer";
 
 
@@ -29,6 +30,7 @@ class App extends Component {
             <Route path="/user" component={BoardUser} />
             <Route path="/doctor" component={BoardDoctor} />
             <Route path="/rendezvous" component={RendezVous} />
+            <Route path="/consultations" component={Consultations} />
           </Switch>
         </div>
         <Footer/>
