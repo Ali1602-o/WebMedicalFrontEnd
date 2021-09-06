@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import AuthService from "../services/auth-service";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
+import patientService from "../services/patient-service";
 
 
 const required = value => {
@@ -45,17 +47,22 @@ export default class Profile extends Component {
     this.onChangeDtNaissance = this.onChangeDtNaissance.bind(this);
     this.onChangeTelephone = this.onChangeTelephone.bind(this);
 
+    
+
     this.state = {
       currentUser: AuthService.getCurrentUser(),
-      prenom : "",
-      nom : "",
-      telephone : "",
-      dtNaissance : null,
+      prenom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().prenom : "",
+      nom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().nom : "",
+      telephone : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().telephone : "",
+      dtNaissance : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().dtNaissance : null,
       successful: false,
-      message: ""
-    };
+      message: "",
+      loading : false
+    }; 
   }
+
   
+
   onChangeNom(e) {
     this.setState({
       nom: e.target.value
@@ -70,7 +77,7 @@ export default class Profile extends Component {
 
   onChangeDtNaissance(e) {
     this.setState({
-      dtNaissace: e.target.value
+      dtNaissance: e.target.value
     });
   }
 
@@ -82,7 +89,44 @@ export default class Profile extends Component {
 
   handleEdit(e){
     e.preventDefault();
+
+    this.setState({
+      message: "",
+      loading: true
+    });
+
     this.form.validateAll();
+    
+    if (this.checkBtn.context._errors.length === 0) {
+        patientService.addInfoProfile(
+          this.state.currentUser.id,
+          this.state.prenom,
+          this.state.nom,
+          this.state.dtNaissance,
+          this.state.telephone
+        ).then(
+          () => {
+            patientService.profileById(this.state.currentUser.id);
+            this.props.history.push("/profile");
+            window.location.reload();
+          },
+          error => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+  
+            this.setState({
+              successful: false,
+              loading : false,
+              message: resMessage
+            });
+          }
+        );
+
+    }
   }
 
 
@@ -114,6 +158,22 @@ export default class Profile extends Component {
                                                   <p class="m-b-10 f-w-600">Email</p>
                                                   <h6 class="text-muted f-w-400">{currentUser.email}</h6>
                                               </div>
+                                              <div class="col-sm-6">
+                                                  <p class="m-b-10 f-w-600">Prénom</p>
+                                                  <h6 class="text-muted f-w-400">{this.state.prenom ? this.state.prenom : "pas encore ajouté."}</h6>
+                                              </div>
+                                              <div class="col-sm-6">
+                                                  <p class="m-b-10 f-w-600">Nom</p>
+                                                  <h6 class="text-muted f-w-400">{this.state.nom ? this.state.nom : "pas encore ajouté."}</h6>
+                                              </div>
+                                              <div class="col-sm-6">
+                                                  <p class="m-b-10 f-w-600">Date de Naissance</p>
+                                                  <h6 class="text-muted f-w-400">{this.state.dtNaissance ? this.state.dtNaissance : "pas encore ajouté."}</h6>
+                                              </div>
+                                              <div class="col-sm-6">
+                                                  <p class="m-b-10 f-w-600">Telephone</p>
+                                                  <h6 class="text-muted f-w-400">{this.state.telephone ? this.state.telephone : "pas encore ajouté."}</h6>
+                                              </div>
                                           </div>
                                           <Form 
                                             onSubmit={this.handleEdit} 
@@ -121,7 +181,7 @@ export default class Profile extends Component {
                                               this.form = c;
                                             }}
                                           >
-                                            <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Completer votre profil</h6>
+                                            <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Modification de profil</h6>
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <p class="m-b-10 f-w-600">Prénom</p>
@@ -172,10 +232,35 @@ export default class Profile extends Component {
                                                 </div>
                                             </div><br/>
                                             <button
-                                              className="btn btn-primary btn-block login-button"
+                                              className="btn btn-block login-button"
+                                              disabled={this.state.loading}
                                             >
-                                              <span>Add</span>
+                                              {this.state.loading && (
+                                                <span className="spinner-border spinner-border-sm"></span>
+                                              )}
+                                              <span>Edit</span>
                                             </button>
+                                            {this.state.message && (
+                                              <div className="form-group">
+                                                <div
+                                                  className={
+                                                    this.state.successful
+                                                      ? "alert alert-success"
+                                                      : "alert alert-danger"
+                                                  }
+                                                  role="alert"
+                                                >
+                                                  {this.state.message}
+                                                </div>
+                                              </div>
+                                            )}
+
+                                            <CheckButton
+                                              style={{ display: "none" }}
+                                              ref={c => {
+                                                this.checkBtn = c;
+                                              }}
+                                            />
                                           </Form>
                                       </div>
                                   </div>
