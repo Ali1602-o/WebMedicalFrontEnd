@@ -1,16 +1,20 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:9002/patient/";
+const API_URL = "http://localhost:9003/doctor/";
 
-class PatientService {
-    addInfoProfile(id, prenom,nom,dtNaissance,telephone) {
+class DoctorService {
+    addInfoDoc(id, prenom,nom,telephone,adresse,ville,specialite,description,status) {
         return axios
         .post(API_URL + "add", {
             id,
             prenom,
             nom,
-            dtNaissance,
-            telephone
+            telephone,
+            adresse,
+            ville,
+            specialite,
+            description,
+            status
         });
     }
 
@@ -33,4 +37,4 @@ class PatientService {
 
 
 
-export default new PatientService();
+export default new DoctorService();

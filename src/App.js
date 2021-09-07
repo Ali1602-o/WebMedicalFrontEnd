@@ -12,9 +12,15 @@ import BoardUser from "./components/user-board";
 import BoardDoctor from "./components/doctor-board";
 import RendezVous from "./components/RendezVous";
 import Footer from "./components/Footer";
+import authService from "./services/auth-service";
 
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = authService.getCurrentUser();
+  }
   
   render() {
     return (
@@ -23,8 +29,8 @@ class App extends Component {
         <div className="container mt-3">
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
+            {!this.state ? <Route exact path="/login" component={Login} /> : <Route exact path="/login" component={Profile} /> }
+            {!this.state ? <Route exact path="/register" component={Register} /> : <Route exact path="/register" component={Profile} /> }
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
             <Route path="/doctor" component={BoardDoctor} />

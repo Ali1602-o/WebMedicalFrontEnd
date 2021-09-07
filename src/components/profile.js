@@ -3,9 +3,11 @@ import AuthService from "../services/auth-service";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import Select from "react-validation/build/select";
+import Textarea from  "react-validation/build/textarea";
+
 import patientService from "../services/patient-service";
-
-
+import doctorService from "../services/doctor-service";
 const required = value => {
   if (!value) {
     return (
@@ -39,22 +41,36 @@ const vname = value => {
 };
 
 export default class Profile extends Component {
+  
+
   constructor(props) {
     super(props);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleEditDoc = this.handleEditDoc.bind(this);
     this.onChangeNom = this.onChangeNom.bind(this);
     this.onChangePrenom = this.onChangePrenom.bind(this);
     this.onChangeDtNaissance = this.onChangeDtNaissance.bind(this);
     this.onChangeTelephone = this.onChangeTelephone.bind(this);
+    this.onChangeAdresse = this.onChangeAdresse.bind(this);
+    this.onChangeVille = this.onChangeVille.bind(this);
+    this.onChangeSpecialite = this.onChangeSpecialite.bind(this);
+    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeStatus = this.onChangeStatus.bind(this);
 
+    patientService.profileById(AuthService.getCurrentUser().id);
+    doctorService.profileById(AuthService.getCurrentUser().id);
     
-
     this.state = {
       currentUser: AuthService.getCurrentUser(),
       prenom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().prenom : "",
       nom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().nom : "",
       telephone : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().telephone : "",
       dtNaissance : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().dtNaissance : null,
+      adresse : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().adresse : "",
+      ville : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().ville : "",
+      specialite: patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().specialite : "",
+      description:  patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().description : "",
+      status: patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().status : "",
       successful: false,
       message: "",
       loading : false
@@ -62,7 +78,7 @@ export default class Profile extends Component {
   }
 
   
-
+/*---------PATIENTS And doctors inputs-------------*/
   onChangeNom(e) {
     this.setState({
       nom: e.target.value
@@ -95,6 +111,8 @@ export default class Profile extends Component {
       loading: true
     });
 
+    
+
     this.form.validateAll();
     
     if (this.checkBtn.context._errors.length === 0) {
@@ -107,8 +125,10 @@ export default class Profile extends Component {
         ).then(
           () => {
             patientService.profileById(this.state.currentUser.id);
-            this.props.history.push("/profile");
-            window.location.reload();
+            this.setState({
+              successful: true,
+              loading : false,
+            });
           },
           error => {
             const resMessage =
@@ -128,7 +148,76 @@ export default class Profile extends Component {
 
     }
   }
+  
 
+
+
+/*-------------------Doctors inputs-------------------*/
+
+
+onChangeAdresse(e) {
+    this.setState({
+      adresse: e.target.value
+    });
+  }
+
+  onChangeVille(e) {
+    this.setState({
+      ville: e.target.value
+    });
+  }
+
+  onChangeSpecialite(e) {
+    this.setState({
+      specialite: e.target.value
+    });
+  }
+
+  onChangeDescription(e){
+    this.setState({
+      description: e.target.value
+    });
+  }
+
+  onChangeStatus(e){
+    this.setState({
+      status: e.target.value
+    });
+  }
+
+  //handle function
+  handleEditDoc(e){
+    e.preventDefault();
+
+    this.setState({
+      loading: true
+    });
+
+    this.form.validateAll();
+    
+    if (this.checkBtn.context._errors.length === 0) {
+        doctorService.addInfoDoc(
+          this.state.currentUser.id,
+          this.state.prenom,
+          this.state.nom,
+          this.state.telephone,
+          this.state.adresse,
+          this.state.ville,
+          this.state.specialite,
+          this.state.description,
+          this.state.status
+        ).then(
+          () => {
+            doctorService.profileById(this.state.currentUser.id);
+            this.setState({
+              successful: true,
+              loading : false,
+            });
+          }
+        );
+
+    }
+  }
 
   render() {
     const { currentUser } = this.state;
@@ -152,7 +241,7 @@ export default class Profile extends Component {
                                   </div>
                                   <div class="col-sm-8">
                                       <div class="card-block">
-                                          <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
+                                          <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Informations Personelles</h6>
                                           <div class="row">
                                               <div class="col-sm-6">
                                                   <p class="m-b-10 f-w-600">Email</p>
@@ -175,6 +264,8 @@ export default class Profile extends Component {
                                                   <h6 class="text-muted f-w-400">{this.state.telephone ? this.state.telephone : "pas encore ajouté."}</h6>
                                               </div>
                                           </div>
+                                          {currentUser.roles == "ROLE_USER" ?(
+                                            /********************INTERFACE PATIENT**************************/
                                           <Form 
                                             onSubmit={this.handleEdit} 
                                             ref={c => {
@@ -221,7 +312,7 @@ export default class Profile extends Component {
                                                 <div class="col-sm-6">
                                                     <p class="m-b-10 f-w-600">Telephone</p>
                                                     <Input
-                                                      type="text"
+                                                      type="textarea"
                                                       className="form-control"
                                                       name="telephone"
                                                       placeholder="Entrez votre numero telephone"
@@ -262,6 +353,158 @@ export default class Profile extends Component {
                                               }}
                                             />
                                           </Form>
+
+                                          ) : (/********************INTERFACE DOCTOR**************************/
+                                            <Form 
+                                            onSubmit={this.handleEditDoc} 
+                                            ref={c => {
+                                              this.form = c;
+                                            }}
+                                          >
+                                            <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Profil Médecin</h6>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Prénom</p>
+                                                    <Input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="prenom"
+                                                      placeholder="Entrez votre prénom"
+                                                      value={this.state.prenom}
+                                                      onChange={this.onChangePrenom}
+                                                      validations={[required,vname]}
+                                                    />
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Nom</p>
+                                                    <Input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="nom"
+                                                      placeholder="Entrez votre nom"
+                                                      value={this.state.nom}
+                                                      onChange={this.onChangeNom}
+                                                      validations={[required,vname]}
+                                                    />
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Telephone Fix</p>
+                                                    <Input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="telephone"
+                                                      placeholder="Entrez votre numero telephone"
+                                                      value={this.state.telephone}
+                                                      onChange={this.onChangeTelephone}
+                                                      validations={[required,vtelephone]}
+                                                    />
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Adresse</p>
+                                                    <Input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="adresse"
+                                                      placeholder="Entrez votre adresse"
+                                                      value={this.state.adresse}
+                                                      onChange={this.onChangeAdresse}
+                                                      validations={[required]}
+                                                    />
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Ville</p>
+                                                    <Select
+                                                      name="ville"
+                                                      value={this.state.ville}
+                                                      onChange={this.onChangeVille}
+                                                      validations={[required]}
+                                                    >
+                                                      <option value="">ville</option>
+                                                      <option value="rabat">Rabat</option>
+                                                      <option value="tanger">Tanger</option>
+                                                      <option value="casablanca">Casablanca</option>
+                                                      <option value="agadir">Agadir</option>
+                                                    </Select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Spécialité</p>
+                                                    <Select
+                                                      name="ville"
+                                                      value={this.state.specialite}
+                                                      onChange={this.onChangeSpecialite}
+                                                      validations={[required]}
+                                                    >
+                                                      <option value="">Spécialité</option>
+                                                      <option value="derm">Dermatologie</option>
+                                                      <option value="psyc">Psychologie</option>
+                                                      <option value="pedi">Pediatre</option>
+                                                      <option value="digest">Digestion</option>
+                                                    </Select>
+                                                </div>
+                                                
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Status</p>
+                                                    <Select
+                                                      className="form-control"
+                                                      name="status"
+                                                      value={this.state.status}
+                                                      onChange={this.onChangeStatus}
+                                                      validations={[]}
+                                                    >
+                                                      <option value="1">Offline</option>
+                                                      <option value="2">Online</option>
+                                                    </Select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Description</p>
+                                                    <Textarea
+                                                      className="form-control"
+                                                      name="description"
+                                                      placeholder="Entrez votre description"
+                                                      value={this.state.description}
+                                                      onChange={this.onChangeDescription}
+                                                      validations={[required]}
+                                                    /> 
+                                                </div>
+                                              </div>
+                                              <br/>
+                                              {/***********************/}
+                                            <button
+                                              className="btn btn-block login-button"
+                                              disabled={this.state.loading}
+                                            >
+                                              {this.state.loading && (
+                                                <span className="spinner-border spinner-border-sm"></span>
+                                              )}
+                                              <span>Edit</span>
+                                            </button>
+                                            {this.state.message && (
+                                              <div className="form-group">
+                                                <div
+                                                  className={
+                                                    this.state.successful
+                                                      ? "alert alert-success"
+                                                      : "alert alert-danger"
+                                                  }
+                                                  role="alert"
+                                                >
+                                                  {this.state.message}
+                                                </div>
+                                              </div>
+                                            )}
+
+                                            <CheckButton
+                                              style={{ display: "none" }}
+                                              ref={c => {
+                                                this.checkBtn = c;
+                                              }}
+                                            />
+                                          </Form>
+                                          
+                                          
+                                          
+                                          
+                                          )}
                                       </div>
                                   </div>
                               </div>

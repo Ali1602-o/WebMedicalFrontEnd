@@ -57,13 +57,6 @@ class NavigationBar extends React.Component {
                         </Link>
                         </li>
 
-                        {showDoctorBoard && (
-                            <li className="nav-item">
-                                <Link to={"/doctor"} className="nav-link">
-                                Doctor Board
-                                </Link>
-                            </li>
-                        )}
                     </div>
 
                     {currentUser ? (

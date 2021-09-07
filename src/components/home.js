@@ -5,9 +5,17 @@ import {Form} from 'react-bootstrap'
 import UserService from "../services/user.service";
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+import AuthService from "../services/auth-service";
+import patientService from "../services/patient-service";
+import doctorService from "../services/doctor-service";
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
+
+    patientService.profileById(AuthService.getCurrentUser().id);
+    doctorService.profileById(AuthService.getCurrentUser().id);
 
     this.state = {
       content: ""
