@@ -47,7 +47,7 @@ class NavigationBar extends React.Component {
                         </Link>
                         </li>
                         <li className="nav-item">
-                        <Link to={"/"} className="nav-link">
+                        <Link to={"/consultations"} className="nav-link">
                             Consulter
                         </Link>
                         </li>
