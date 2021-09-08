@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {Button,Row} from "react-bootstrap";
 import {Form} from 'react-bootstrap'
 import UserService from "../services/user.service";
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faSearch, GoVerified} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import AuthService from "../services/auth-service";
