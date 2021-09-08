@@ -3,10 +3,6 @@ import { Container } from 'react-bootstrap';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import Select from "react-validation/build/select";
-import li from "react-validation/build/select";
-import { isEmail } from "validator";
-import ReactDOM from 'react-dom';
-
 
 const required = value => {
   if (!value) {
@@ -18,34 +14,23 @@ const required = value => {
   }
 };
 
-const email = value => {
-  if (!isEmail(value)) {
+const vnom = value => {
+  var nomRegex = /^[a-z ,.'-]+$/i;
+  if (!value.match(nomRegex)) {
     return (
       <div class="input-error-message">
-        * email invalide (ex : user@gmail.com)
+        * nom invalide (ex : imane )
       </div>
     );
   }
 };
 
-const vusername = value => {
-  var unameRegex = /^[a-z\_]+[0-9a-z]*$/;
-  if (!value.match(unameRegex)) {
+const vprenom = value => {
+  var prenomRegex = /^[a-z ,.'-]+$/i;
+  if (!value.match(prenomRegex)) {
     return (
       <div class="input-error-message">
-        * username invalide (ex : user_12, user12)
-      </div>
-    );
-  }
-};
-
-
-const vadresse = value => {
-  var adresseRegex = /^[a-z\_]+[0-9a-z]*$/;
-  if (!value.match(adresseRegex)) {
-    return (
-      <div class="input-error-message">
-        * adresse invalide (ex : ville_quartier)
+        * nom invalide (ex : krioutate )
       </div>
     );
   }
@@ -62,8 +47,7 @@ const vtelephone = value => {
   }
 };
 
-
-const vlengthUsername = value => {
+const vlengthnom = value => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div class="input-error-message">
@@ -73,6 +57,15 @@ const vlengthUsername = value => {
   }
 };
 
+const vlengthprenom = value => {
+  if (value.length < 3 || value.length > 20) {
+    return (
+      <div class="input-error-message">
+        * nombre de caractéres doit être entre 3 et 20 caractéres !
+      </div>
+    );
+  }
+};
 
 const vlengthtelephone = value => {
   if (value.length < 10 || value.length > 14) {
@@ -85,52 +78,43 @@ const vlengthtelephone = value => {
 };
 
 
-const vlengthadresse = value => {
-  if (value.length < 10 || value.length > 50) {
-    return (
-      <div class="input-error-message">
-        * nombre de caractéres doit être entre 10 et 50 caractéres !
-      </div>
-    );
-  }
-};
-
 export default class RendezVous extends Component {
+
 
   constructor(props) {
     super(props);
 
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangeSexe = this.onChangeSexe.bind(this);
+    this.onChangenom = this.onChangenom.bind(this);
+    this.onChangeprenom = this.onChangeprenom.bind(this);
+    this.onChangeDtNaissance = this.onChangeDtNaissance.bind(this);
     this.onChangetelephone = this.onChangetelephone.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeadresse = this.onChangeadresse.bind(this);
+    this.onChangeheure = this.onChangeheure.bind(this);
+    this.onChangeDtreservation = this.onChangeDtreservation.bind(this);
+
 
 
 
     this.state = {
-      username: "",
-      sexe: [] ,
-      telephone : "",
-      email: "",
-      adresse : "",
-    
+      nom: "",
+      prenom: "",
+      telephone: "",
+      dtNaissance: "",
+      heure: [],
+      dtreservation : "",
     };
   }
 
-  onChangeUsername(e) {
+  onChangenom(e) {
     this.setState({
-      username: e.target.value
+      nom: e.target.value
     });
   }
 
-
-  onChangeEmail(e) {
+  onChangeprenom(e) {
     this.setState({
-      email: e.target.value
+      prenom: e.target.value
     });
   }
-
 
   onChangetelephone(e) {
     this.setState({
@@ -138,18 +122,22 @@ export default class RendezVous extends Component {
     });
   }
 
-  onChangeSexe(e){
+  onChangeDtNaissance(e) {
     this.setState({
-      sexe: e.target.value
-    })
-  }
-
-  onChangeadresse(e) {
-    this.setState({
-      adresse: e.target.value
+      dtNaissance: e.target.value
     });
   }
 
+  onChangeDtreservation(e) {
+    this.setState({
+      dtreservation: e.target.value
+    });
+  }
+  onChangeheure(e) {
+    this.setState({
+      heure: e.target.value
+    })
+  }
 
   render() {
     return (
@@ -170,11 +158,24 @@ export default class RendezVous extends Component {
                     <Input
                       type="text"
                       className="form-control"
-                      name="username"
-                      placeholder="Entrez votre username"
-                      value={this.state.username}
-                      onChange={this.onChangeUsername}
-                      validations={[required, vusername, vlengthUsername]}
+                      name="nom"
+                      placeholder="Entrez votre nom"
+                      value={this.state.nom}
+                      onChange={this.onChangenom}
+                      validations={[required, vnom, vlengthnom]}
+                    />
+                  </div>
+
+
+                  <div className="form-group">
+                    <Input
+                      type="text"
+                      className="form-control"
+                      name="prenom"
+                      placeholder="Entrez votre prenom"
+                      value={this.state.prenom}
+                      onChange={this.onChangeprenom}
+                      validations={[required, vprenom, vlengthprenom]}
                     />
                   </div>
 
@@ -183,70 +184,57 @@ export default class RendezVous extends Component {
                       type="text"
                       className="form-control"
                       name="telephone"
-                      placeholder="Numéro de téléphone"                      
+                      placeholder="Numéro de téléphone"
                       value={this.state.telephone}
                       onChange={this.onChangetelephone}
                       validations={[required, vtelephone, vlengthtelephone]}
                     />
                   </div>
-                  
 
-                  
                   <div className="form-group">
                     <Input
-                      type="text"
+                      type="date"
                       className="form-control"
-                      name="email"
-                      placeholder="Entrez votre email"
-                      value={this.state.email}
-                      onChange={this.onChangeEmail}
-                      validations={[required, email]}
+                      name="dtNaissance"
+                      placeholder="jj/mm/aaaa"
+                      value={this.state.dtNaissance}
+                      onChange={this.onChangeDtNaissance}
+                      validations={[required]}
                     />
                   </div>
 
-                
-
-
                   <div className="form-group">
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="adresse"
-                      placeholder="Entrez votre adresse"
-                      value={this.state.adresse}
-                      onChange={this.onChangeadresse}
-                      validations={[required, vadresse , vlengthadresse ]}
-                    />
-                  </div> 
-                  
-                   <div className="form-group">
                     <Select
                       className="form-control"
-                      name="sexe"
-                      value={this.state.sexe}
-                      onChange={this.onChangeSexe}
+                      name="heure"
+                      value={this.state.heure}
+                      onChange={this.onChangeRole}
                       validations={[required]}
                     >
-                      <option >  Sexe :</option>
-                      <option value={['Masculin']}>Masculin</option>
-                      <option value={['feminine']}>féminine</option>
+                      <option>Choisissez l'heure de rendez-vous:</option>
+                      <option value={['avantmidi']}>09:00 AM </option>
+                      <option value={['avantmidi']}>10:00 AM </option>
+                      <option value={['avantmidi']}>11:00 AM </option>
+                      <option value={['apresmidi']}>14:00 PM</option>
+                      <option value={['apresmidi']}>13:00 PM</option>
+                      <option value={['apresmidi']}>16:00 PM</option>
                     </Select>
                   </div>
 
-
-
-
-
-         
-
-
-
-
-
-
+                  <div className="form-group">
+                    <Input
+                      type="date"
+                      className="form-control"
+                      name="dtreservation"
+                      placeholder="jj/mm/aaaa"
+                      value={this.state.dtreservation}
+                      onChange={this.onChangeDtreservation}
+                      validations={[required]}
+                    />
+                  </div>
 
                   <div className="form-group">
-                    <button  className="btn btn-primary btn-block login-button">Réservez</button>
+                    <button className="btn btn-primary btn-block login-button">Réservez</button>
                   </div>
 
                 </div>
@@ -258,3 +246,4 @@ export default class RendezVous extends Component {
     );
   }
 }
+
