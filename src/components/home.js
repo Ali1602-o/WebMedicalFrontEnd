@@ -14,6 +14,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    //Test if user is connected or not
     if(AuthService.getCurrentUser()){
       patientService.profileById(AuthService.getCurrentUser().id);
       doctorService.profileById(AuthService.getCurrentUser().id);

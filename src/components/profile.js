@@ -105,6 +105,8 @@ export default class Profile extends Component {
     })
   }
 
+
+  // handle regular user(patient) infos function
   handleEdit(e){
     e.preventDefault();
 
@@ -112,8 +114,6 @@ export default class Profile extends Component {
       message: "",
       loading: true
     });
-
-    
 
     this.form.validateAll();
     
@@ -187,7 +187,7 @@ onChangeAdresse(e) {
     });
   }
 
-  //handle function
+  //handle doc infos 
   handleEditDoc(e){
     e.preventDefault();
 
@@ -227,6 +227,7 @@ onChangeAdresse(e) {
     return (
       
       <div className="container">
+        {/*Test if user is connected or not*/}
         {currentUser ? (
           <div className="container">
             <div class="page-content page-container" id="page-content">
@@ -266,6 +267,7 @@ onChangeAdresse(e) {
                                                   <h6 class="text-muted f-w-400">{this.state.telephone ? this.state.telephone : "pas encore ajouté."}</h6>
                                               </div>
                                           </div>
+                                          {/*Test if user is a regular user or a doctor*/}
                                           {currentUser.roles == "ROLE_USER" ?(
                                             /********************INTERFACE PATIENT**************************/
                                           <Form 
