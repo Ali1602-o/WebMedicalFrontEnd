@@ -57,8 +57,10 @@ export default class Profile extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
 
-    patientService.profileById(AuthService.getCurrentUser().id);
-    doctorService.profileById(AuthService.getCurrentUser().id);
+    if(AuthService.getCurrentUser().roles == "ROLE_USER")
+      patientService.profileById(AuthService.getCurrentUser().id);
+    else 
+      doctorService.profileById(AuthService.getCurrentUser().id);
     
     this.state = {
       currentUser: AuthService.getCurrentUser(),

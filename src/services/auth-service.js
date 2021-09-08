@@ -1,8 +1,6 @@
 import axios from "axios";
-import patientService from "./patient-service";
 
 const API_URL = "http://localhost:9091/auth/";
-const API_URL2 = "http://localhost:9002/patient/";
 
 class AuthService {
   login(username, password) {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:9003/doctor/";
+const API_URL = "http://localhost:9090/doctor/";
 
 class DoctorService {
     addInfoDoc(id, prenom,nom,telephone,adresse,ville,specialite,description,status) {

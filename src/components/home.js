@@ -14,8 +14,11 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    patientService.profileById(AuthService.getCurrentUser().id);
-    doctorService.profileById(AuthService.getCurrentUser().id);
+    if(AuthService.getCurrentUser()){
+      patientService.profileById(AuthService.getCurrentUser().id);
+      doctorService.profileById(AuthService.getCurrentUser().id);
+    }
+      
 
     this.state = {
       content: ""

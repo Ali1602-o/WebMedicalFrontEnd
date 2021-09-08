@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:9002/patient/";
+const API_URL = "http://localhost:9090/patient/";
 
 class PatientService {
     addInfoProfile(id, prenom,nom,dtNaissance,telephone) {
