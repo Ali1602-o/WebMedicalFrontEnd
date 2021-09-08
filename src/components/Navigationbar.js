@@ -52,7 +52,7 @@ class NavigationBar extends React.Component {
                         </Link>
                         </li>
                         <li className="nav-item">
-                        <Link to={"/"} className="nav-link">
+                        <Link to={"/medecins"} className="nav-link">
                             Médecins
                         </Link>
                         </li>
