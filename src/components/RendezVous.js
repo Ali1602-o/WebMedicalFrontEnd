@@ -12,7 +12,6 @@ import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 
-
 const required = value => {
   if (!value) {
     return (
@@ -102,6 +101,7 @@ export default class RendezVous extends Component {
 
 
 
+
     this.state = {
       prenom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().prenom : "",
       nom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().nom : "",
@@ -187,7 +187,11 @@ export default class RendezVous extends Component {
       );
     }
   }
-
+  onChangeheure(e) {
+    this.setState({
+      heure: e.target.value
+    })
+  }
 
 
   render() {
@@ -235,6 +239,7 @@ export default class RendezVous extends Component {
                     />
                   </div>
 
+
                   <div className="form-group">
                     <Input
                       type="text"
@@ -246,11 +251,24 @@ export default class RendezVous extends Component {
                       validations={[required, vtelephone, vlengthtelephone]}
                     />
                   </div>
+
+                  <div className="form-group">
+                    <Input
+                      type="date"
+                      className="form-control"
+                      name="dtNaissance"
+                      placeholder="jj/mm/aaaa"
+                      value={this.state.dtNaissance}
+                      onChange={this.onChangeDtNaissance}
+                      validations={[required]}
+                    />
+                  </div>
                   <div className="form-group">
                     <Select
                       className="form-control"
                       name="heure"
                       value={this.state.heure}
+
                       onChange={this.onChangeheure}
                       validations={[required]}
                     >
@@ -258,10 +276,14 @@ export default class RendezVous extends Component {
                       <option value='09:00 AM'>09:00 AM </option>
                       <option value='11:00 AM'>11:00 AM </option>
                       <option value='14:00 PM'>14:00 PM</option>
+
+      
+
                     </Select>
                   </div>
 
                   <div className="form-group">
+
                     <Select
                       type="date"
                       className="form-control"
@@ -275,7 +297,9 @@ export default class RendezVous extends Component {
                       <option value='13-09-2021'>13-09-2021 </option>
                       <option value='15-09-2021'>15-09-2021 </option>
                       <option value='16-09-2021'>16-09-2021</option>
+ 
                     </Select>
+
                   </div>
 
                   <div className="form-group">
@@ -313,3 +337,4 @@ export default class RendezVous extends Component {
     );
   }
 }
+
