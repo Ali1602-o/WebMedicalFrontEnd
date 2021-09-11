@@ -127,6 +127,7 @@ export default class Login extends Component {
                 value={this.state.username}
                 onChange={this.onChangeUsername}
                 validations={[required]}
+                autoComplete="off"
               />
             </div>
 
@@ -139,6 +140,7 @@ export default class Login extends Component {
                 value={this.state.password}
                 onChange={this.onChangePassword}
                 validations={[required]}
+                autoComplete="off"
               />
             </div>
 

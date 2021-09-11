@@ -29,6 +29,13 @@ class DoctorService {
          
     }
 
+    getAllDoctors(){
+        return axios.get(API_URL +"all").then(
+            response => response.data).then(
+                (data) => {return data;}
+            );
+    }
+
 
     getCurrentUserInfos() {
         return JSON.parse(localStorage.getItem('userInfo'));

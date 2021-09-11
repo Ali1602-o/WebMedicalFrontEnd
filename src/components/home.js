@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import {Link} from "react-router-dom";
 import {Button,Row} from "react-bootstrap";
-import {Form} from 'react-bootstrap'
 import UserService from "../services/user.service";
-import {faSearch, GoVerified} from '@fortawesome/free-solid-svg-icons';
+import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-
+import Form from "react-validation/build/form";
+import Select from "react-validation/build/select";
 import AuthService from "../services/auth-service";
 import patientService from "../services/patient-service";
 import doctorService from "../services/doctor-service";
+import axios from "axios";
+
+const API_URL = "http://localhost:9090/doctor/";
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
-
+    this.onChangeSpecialite = this.onChangeSpecialite.bind(this);
+    this.handleSpecialite= this.handleSpecialite.bind(this);
     //Test if user is connected or not
     if(AuthService.getCurrentUser()){
       patientService.profileById(AuthService.getCurrentUser().id);
@@ -22,44 +26,55 @@ export default class Home extends Component {
       
 
     this.state = {
+      doctors:[],
+      specialite :"",
       content: ""
     };
   }
 
+
+  onChangeSpecialite(e) {
+    this.setState({
+      specialite: e.target.value
+    });
+  }
+
+
+  handleSpecialite(e){
+    e.preventDefault();
+
+    axios.get(API_URL +"Specialite/"+this.state.specialite).then(
+      response => response.data).then(
+          (data) => {
+            this.props.history.push( {pathname: "/medecins", state: { doctors : data, speci: this.state.specialite}});
+          }
+      );
+
+      
+
+  }
+
   componentDidMount() {
-    UserService.getPublicContent().then(
-      response => {
-        this.setState({
-          content: response.data
-        });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
   }
 
   render() {
     return (
       
       <div className="container">
-        <div className="col-md-12" align="center"><h3>Trouvez votre Médecin !</h3> </div>                  
-        <Form onSubmit={""} id="DoctorSearchId">
+        <div className="col-md-12" align="center"><h3>Trouvez votre Médecin !</h3> </div> 
+                         
+        <Form id="DoctorSearchId" onSubmit={this.handleSpecialite}>
           
-              <Form.Row>
-                      <Form.Control as="select" className="col-md-11">
-                        <option>Selectionnez une spécialité</option>
-                        <option value="1">Dermatologie</option>
-                        <option value="2">Pediatre</option>
-                        <option value="3">Psycologie</option>
-                      </Form.Control>
-                  <Button size="sm" variant="dark" type="submit"><FontAwesomeIcon icon={faSearch}/></Button>
-              </Form.Row> 
+              <Row>
+                      <Select name="specialite" onChange={this.onChangeSpecialite} value={this.state.specialite} className="form-control"style={{width: "749px",marginLeft:"250px"}} >
+                        <option value="">Selectionnez une spécialité</option>
+                        <option value="Dermatologue">Dermatologie</option>
+                        <option value="Pediatre">Pediatre</option>
+                        <option value="Psychiatre">Psycologie</option>
+                      </Select>
+                      <button id="submitlist2" style={{marginLeft:"-285px",height:"38px",color:"black"}}><FontAwesomeIcon icon={faSearch}/></button>   
+            </Row>
+           
         </Form>
 
 
@@ -91,7 +106,7 @@ export default class Home extends Component {
               <img src="images/find-doctor-icon.png" class="find-icon"/>
               <div class="find-description">
                 <p>Trouvez votre médecin et prennez un rendez vous.</p>
-                <Link to={"/"} class="find-btn">Trouver</Link>
+                <Link to={"/medecins"} class="find-btn">Trouver</Link>
               </div>
             </div>
             

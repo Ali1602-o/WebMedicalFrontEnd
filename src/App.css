@@ -333,6 +333,10 @@ label {
   background: linear-gradient(to right, #67B26F, #afffca)
 }
 
+
+.bg-c-lite-green-cons {
+  background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+}
 .user-profile {
   padding: 20px 0
 }
@@ -515,37 +519,49 @@ h6 {
 /****************************************************************/
 
 .filterBar{
-   height: 100px;
-   margin-left: auto;
-   margin-right: auto;
-   padding-left: 300px;
-   padding-top: 20px;
+  height: 100px;
+  padding-left: 290px;
+  padding-top: 20px;
 }
 
 .doctorsContainer{
-  width:100%;
-  height: 100vh;
-  margin: 0 auto;
+  width :120%;
+  margin-top: 50px;
+  margin-left: -143px;
   background-color: #BBFFC2;
 }
+
+
+
 
 #doctorblock{
   /*height: 300px;*/
   border-radius: 15px;
   margin-left: 50px;
+  margin-bottom: 20px;
   height: 300px;
   background-color: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
 
+#doctorblock:hover{
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);transition: 0.4s;
 }
 
 
 #infoblock{
-     padding-top: 20px;
-     border-radius:20px;
-     height: 300px;
-     margin-left:40px;
-     width:330px;
-     background-color: white;
+    font-family: "Open Sans",sans-serif;
+    font-weight: lighter;
+    position:absolute;
+    top:375px;
+    left:1070px;
+    padding-top: 20px;
+    border-radius:20px;
+    height: 300px;
+    margin-left:40px;
+    width:330px;
+    background-color: white;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 #docRow{
@@ -555,16 +571,18 @@ h6 {
 }
 
 #title1{
-    padding-top: 30px;
-    width: 1000px;
+    
+    padding-top: 45px;
+    width: 1140px;
     margin-right:px;
     text-align: center;
 }
 
 
 #title2{
-   padding-top: 70px;
-   width: 300px;
+  margin-top: 10px;
+  padding-top: 50px;
+  width: 300px;
 }
 
 #listeConsiels{
@@ -587,6 +605,7 @@ h6 {
 #infoDoctor{
   /*border-style: solid;
   border-color: black;*/
+  padding-left: 40px;
   margin-top: 30px;
   height: 270px;
 }
@@ -605,8 +624,7 @@ h6 {
 }
 
 #name{
-  padding-left: 20px;
-  width: 230px;
+  padding-left: 10px;
   display: flex;
   height: 30px;
 }
@@ -617,11 +635,11 @@ h6 {
 
 .dipliste{
   list-style: none;
-  padding-left: 5px;
+  padding-left: 0px;
 }
 
 #listbtn{
-  margin-left: 100px;
+  margin-left: 250px;
   
 }
 #lii{
@@ -640,37 +658,64 @@ h6 {
 .link-btn:hover {
   color: black;
   text-decoration: none;
-  margin:0 auto;
 }
 
 .diplomes{
   margin-bottom: 40px;
 }
 
-.dot {
-  height: 15px;
-  width: 15px;
+.dot-green {
+  font-family: "Open Sans", sans-serif;
+  font-weight: lighter;
+  height: 12px;
+  width: 12px;
   background-color: #4CBB17;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red {
+  font-family: "Open Sans", sans-serif;
+  font-weight: lighter;
+  height: 12px;
+  width: 12px;
+  background-color: tomato;
   border-radius: 50%;
   display: inline-block;
 }
 
 .onlineoffline{
   padding-top: 5px;
-  padding-left: 5px;
   text-align: center;
   font-weight: bold;
 }
 
 
 #selectlist{
-  width: 300px;
+  width: 350px;
 }
 
 
 #submitlist{
+  border-style: none;
+  border:1px solid rgb(212, 208, 208);
+  background-color: #BBFFC2;
+  border-radius: 0 5px 5px 0px;
   width: 80px;
+  height: 47px;
 }
 
+#submitlist2{
+  border-style: none;
+  border:1px solid rgb(212, 208, 208);
+  background-color: #BBFFC2;
+  border-radius: 0 5px 5px 0px;
+  width: 50px;
+  height: 47px;
+}
+.consult-book-btn{
+  position: absolute;
+  bottom:11px;
+}
 
 /* <input id="submitlist" type="submit" value="Envoyer" />*/

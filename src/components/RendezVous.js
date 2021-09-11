@@ -3,9 +3,14 @@ import { Container } from 'react-bootstrap';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import Select from "react-validation/build/select";
-import li from "react-validation/build/select";
-import { isEmail } from "validator";
-import ReactDOM from 'react-dom';
+import CheckButton from "react-validation/build/button";
+import patientService from "../services/patient-service";
+import BookService from "../services/book-service";
+import AuthService from "../services/auth-service";
+import {Link} from "react-router-dom"
+import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
 
 
 const required = value => {
@@ -18,34 +23,23 @@ const required = value => {
   }
 };
 
-const email = value => {
-  if (!isEmail(value)) {
+const vnom = value => {
+  var nomRegex = /^[a-z ,.'-]+$/i;
+  if (!value.match(nomRegex)) {
     return (
       <div class="input-error-message">
-        * email invalide (ex : user@gmail.com)
+        * nom invalide (ex : imane )
       </div>
     );
   }
 };
 
-const vusername = value => {
-  var unameRegex = /^[a-z\_]+[0-9a-z]*$/;
-  if (!value.match(unameRegex)) {
+const vprenom = value => {
+  var prenomRegex = /^[a-z ,.'-]+$/i;
+  if (!value.match(prenomRegex)) {
     return (
       <div class="input-error-message">
-        * username invalide (ex : user_12, user12)
-      </div>
-    );
-  }
-};
-
-
-const vadresse = value => {
-  var adresseRegex = /^[a-z\_]+[0-9a-z]*$/;
-  if (!value.match(adresseRegex)) {
-    return (
-      <div class="input-error-message">
-        * adresse invalide (ex : ville_quartier)
+        * nom invalide (ex : krioutate )
       </div>
     );
   }
@@ -62,8 +56,7 @@ const vtelephone = value => {
   }
 };
 
-
-const vlengthUsername = value => {
+const vlengthnom = value => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div class="input-error-message">
@@ -73,6 +66,15 @@ const vlengthUsername = value => {
   }
 };
 
+const vlengthprenom = value => {
+  if (value.length < 3 || value.length > 20) {
+    return (
+      <div class="input-error-message">
+        * nombre de caractéres doit être entre 3 et 20 caractéres !
+      </div>
+    );
+  }
+};
 
 const vlengthtelephone = value => {
   if (value.length < 10 || value.length > 14) {
@@ -85,52 +87,45 @@ const vlengthtelephone = value => {
 };
 
 
-const vlengthadresse = value => {
-  if (value.length < 10 || value.length > 50) {
-    return (
-      <div class="input-error-message">
-        * nombre de caractéres doit être entre 10 et 50 caractéres !
-      </div>
-    );
-  }
-};
-
 export default class RendezVous extends Component {
+
 
   constructor(props) {
     super(props);
-
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangeSexe = this.onChangeSexe.bind(this);
+    this.handleReserv = this.handleReserv.bind(this);
+    this.onChangenom = this.onChangenom.bind(this);
+    this.onChangeprenom = this.onChangeprenom.bind(this);
     this.onChangetelephone = this.onChangetelephone.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeadresse = this.onChangeadresse.bind(this);
+    this.onChangeDtreservation = this.onChangeDtreservation.bind(this);
+    this.onChangeheure = this.onChangeheure.bind(this);
+
 
 
 
     this.state = {
-      username: "",
-      sexe: [] ,
-      telephone : "",
-      email: "",
-      adresse : "",
-    
+      prenom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().prenom : "",
+      nom : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().nom : "",
+      telephone : patientService.getCurrentUserInfos() ? patientService.getCurrentUserInfos().telephone : "",
+      dtreservation : "",
+      heure: "",
+      user: AuthService.getCurrentUser() ? AuthService.getCurrentUser().id : 0 ,
+      medecinId: this.props.location.state.id,
+      successful: false,
+      message: ""
     };
   }
 
-  onChangeUsername(e) {
+  onChangenom(e) {
     this.setState({
-      username: e.target.value
+      nom: e.target.value
     });
   }
 
-
-  onChangeEmail(e) {
+  onChangeprenom(e) {
     this.setState({
-      email: e.target.value
+      prenom: e.target.value
     });
   }
-
 
   onChangetelephone(e) {
     this.setState({
@@ -138,17 +133,61 @@ export default class RendezVous extends Component {
     });
   }
 
-  onChangeSexe(e){
+  onChangeDtreservation(e) {
     this.setState({
-      sexe: e.target.value
+      dtreservation: e.target.value
+    });
+  }
+  onChangeheure(e) {
+    this.setState({
+      heure: e.target.value
     })
   }
 
-  onChangeadresse(e) {
+
+  handleReserv(e) {
+    e.preventDefault();
+
     this.setState({
-      adresse: e.target.value
+      message: "",
+      successful: false
     });
+
+    this.form.validateAll();
+
+    if (this.checkBtn.context._errors.length === 0) {
+      BookService.addReservation(
+        this.state.prenom,
+        this.state.nom,
+        this.state.telephone,
+        this.state.dtreservation,
+        this.state.heure,
+        this.state.user,
+        this.state.medecinId
+      ).then(
+        response => {
+          this.setState({
+            message: response.data.message ? response.data.message : "Votre réservation est effectué avec succés! ",
+            successful: true
+          });
+        },
+        error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          this.setState({
+            successful: false,
+            message: resMessage
+          });
+        }
+      );
+    }
   }
+
 
 
   render() {
@@ -157,24 +196,42 @@ export default class RendezVous extends Component {
         <div className="col-md-12 login-container">
           <div className="row">
             <div className="col-md-5 compImage">
-              <img src="./images/doctor illustration.png" />
+              <img src="./images/rdv.jpeg" style={{marginTop:"150px"}}/>
             </div>
             <div className="col-md-7 login-form" align="center">
+            <button className="btn btn-block login-button" style={{backgroundColor:"tomato",width: "auto"}}><Link to={"/medecins"} style={{textDecoration:"none",color:"white"}}><FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon></Link></button>
+              <br/> <br/> <br/>
               <h2>Réservez votre Rendez-vous  !</h2>
               <br />
-              <p> Remplissez le formulaire ci-dessous. Nous vous recontacterons bientôt pour de plus amples informations.</p>
-
-              <Form >
+              <p> Remplissez le formulaire ci-dessous. Nous vous recontacterons bientôt pour de plus informations.</p>
+              
+              <Form onSubmit={this.handleReserv} ref={c => {
+                this.form = c;
+              }}>
+                {!this.state.successful && (
                 <div>
                   <div className="form-group">
                     <Input
                       type="text"
                       className="form-control"
-                      name="username"
-                      placeholder="Entrez votre username"
-                      value={this.state.username}
-                      onChange={this.onChangeUsername}
-                      validations={[required, vusername, vlengthUsername]}
+                      name="nom"
+                      placeholder="Entrez votre nom"
+                      value={this.state.nom}
+                      onChange={this.onChangenom}
+                      validations={[required, vnom, vlengthnom]}
+                    />
+                  </div>
+
+
+                  <div className="form-group">
+                    <Input
+                      type="text"
+                      className="form-control"
+                      name="prenom"
+                      placeholder="Entrez votre prenom"
+                      value={this.state.prenom}
+                      onChange={this.onChangeprenom}
+                      validations={[required, vprenom, vlengthprenom]}
                     />
                   </div>
 
@@ -183,73 +240,71 @@ export default class RendezVous extends Component {
                       type="text"
                       className="form-control"
                       name="telephone"
-                      placeholder="Numéro de téléphone"                      
+                      placeholder="Numéro de téléphone"
                       value={this.state.telephone}
                       onChange={this.onChangetelephone}
                       validations={[required, vtelephone, vlengthtelephone]}
                     />
                   </div>
-                  
-
-                  
                   <div className="form-group">
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="email"
-                      placeholder="Entrez votre email"
-                      value={this.state.email}
-                      onChange={this.onChangeEmail}
-                      validations={[required, email]}
-                    />
-                  </div>
-
-                
-
-
-                  <div className="form-group">
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="adresse"
-                      placeholder="Entrez votre adresse"
-                      value={this.state.adresse}
-                      onChange={this.onChangeadresse}
-                      validations={[required, vadresse , vlengthadresse ]}
-                    />
-                  </div> 
-                  
-                   <div className="form-group">
                     <Select
                       className="form-control"
-                      name="sexe"
-                      value={this.state.sexe}
-                      onChange={this.onChangeSexe}
+                      name="heure"
+                      value={this.state.heure}
+                      onChange={this.onChangeheure}
                       validations={[required]}
                     >
-                      <option >  Sexe :</option>
-                      <option value={['Masculin']}>Masculin</option>
-                      <option value={['feminine']}>féminine</option>
+                      <option>Choisissez l'heure de rendez-vous:</option>
+                      <option value='09:00 AM'>09:00 AM </option>
+                      <option value='11:00 AM'>11:00 AM </option>
+                      <option value='14:00 PM'>14:00 PM</option>
                     </Select>
                   </div>
 
-
-
-
-
-         
-
-
-
-
-
-
-
                   <div className="form-group">
-                    <button  className="btn btn-primary btn-block login-button">Réservez</button>
+                    <Select
+                      type="date"
+                      className="form-control"
+                      name="dtreservation"
+                      placeholder="jj/mm/aaaa"
+                      value={this.state.dtreservation}
+                      onChange={this.onChangeDtreservation}
+                      validations={[required]}
+                    >
+                      <option>Choisissez la date de rendez-vous:</option>
+                      <option value='13-09-2021'>13-09-2021 </option>
+                      <option value='15-09-2021'>15-09-2021 </option>
+                      <option value='16-09-2021'>16-09-2021</option>
+                    </Select>
                   </div>
 
+                  <div className="form-group">
+                    <button className="btn btn-primary btn-block login-button">Réservez</button>
+                  </div>
+                  
+
                 </div>
+                )}
+                {this.state.message && (
+                  <div className="form-group">
+                    <div
+                      className={
+                        this.state.successful
+                          ? "alert alert-success"
+                          : "alert alert-danger"
+                      }
+                      role="alert"
+                    >
+                      {this.state.message}
+                    </div>
+                  </div>
+                )}
+                  <CheckButton
+                    style={{ display: "none" }}
+                    ref={c => {
+                      this.checkBtn = c;
+                    }}
+                  />
               </Form>
             </div>
           </div>

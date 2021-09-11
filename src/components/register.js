@@ -188,6 +188,7 @@ export default class Register extends Component {
                       value={this.state.username}
                       onChange={this.onChangeUsername}
                       validations={[required, vusername,vlengthUsername]}
+                      autoComplete="off"
                     />
                   </div>
 
@@ -200,6 +201,7 @@ export default class Register extends Component {
                       value={this.state.email}
                       onChange={this.onChangeEmail}
                       validations={[required, email]}
+                      autoComplete="off"
                     />
                   </div>
 
@@ -212,6 +214,7 @@ export default class Register extends Component {
                       value={this.state.password}
                       onChange={this.onChangePassword}
                       validations={[required, vpassword]}
+                      autoComplete="off"
                     />
                   </div>
 

@@ -15,6 +15,7 @@ import medecins from "./components/medecins";
 import Consultations from "./components/consultations";
 import Footer from "./components/Footer";
 import authService from "./services/auth-service";
+import ConsultInfo from "./components/consultInfo";
 
 
 class App extends Component {
@@ -39,6 +40,7 @@ class App extends Component {
             <Route path="/rendezvous" component={RendezVous} />
             <Route path="/medecins" component={medecins} />
             <Route path="/consultations" component={Consultations} />
+            <Route path="/consultInfo" component={ConsultInfo} />
           </Switch>
         </div>
         <Footer/>

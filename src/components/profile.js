@@ -5,7 +5,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import Select from "react-validation/build/select";
 import Textarea from  "react-validation/build/textarea";
-
+import {Link} from "react-router-dom";
 import patientService from "../services/patient-service";
 import doctorService from "../services/doctor-service";
 const required = value => {
@@ -57,10 +57,15 @@ export default class Profile extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
 
-    if(AuthService.getCurrentUser().roles == "ROLE_USER")
-      patientService.profileById(AuthService.getCurrentUser().id);
-    else 
-      doctorService.profileById(AuthService.getCurrentUser().id);
+    if(AuthService.getCurrentUser()){
+      if(AuthService.getCurrentUser().roles == "ROLE_USER")
+        patientService.profileById(AuthService.getCurrentUser().id);
+      else 
+        doctorService.profileById(AuthService.getCurrentUser().id);
+    }
+
+
+    
     
     this.state = {
       currentUser: AuthService.getCurrentUser(),
@@ -288,6 +293,7 @@ onChangeAdresse(e) {
                                                       value={this.state.prenom}
                                                       onChange={this.onChangePrenom}
                                                       validations={[required,vname]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -300,6 +306,7 @@ onChangeAdresse(e) {
                                                       value={this.state.nom}
                                                       onChange={this.onChangeNom}
                                                       validations={[required,vname]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -311,6 +318,7 @@ onChangeAdresse(e) {
                                                       value={this.state.dtNaissance}
                                                       onChange={this.onChangeDtNaissance}
                                                       validations={[required]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -323,6 +331,7 @@ onChangeAdresse(e) {
                                                       value={this.state.telephone}
                                                       onChange={this.onChangeTelephone}
                                                       validations={[required,vtelephone]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                             </div><br/>
@@ -377,6 +386,7 @@ onChangeAdresse(e) {
                                                       value={this.state.prenom}
                                                       onChange={this.onChangePrenom}
                                                       validations={[required,vname]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -389,6 +399,7 @@ onChangeAdresse(e) {
                                                       value={this.state.nom}
                                                       onChange={this.onChangeNom}
                                                       validations={[required,vname]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -401,6 +412,7 @@ onChangeAdresse(e) {
                                                       value={this.state.telephone}
                                                       onChange={this.onChangeTelephone}
                                                       validations={[required,vtelephone]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -413,6 +425,7 @@ onChangeAdresse(e) {
                                                       value={this.state.adresse}
                                                       onChange={this.onChangeAdresse}
                                                       validations={[required]}
+                                                      autoComplete="off"
                                                     />
                                                 </div>
                                                 <div class="col-sm-6">
@@ -517,37 +530,15 @@ onChangeAdresse(e) {
                   </div>
               </div>
           </div>
-            {/*<header className="jumbotron">
-              <h3>
-                <strong>{currentUser.username}</strong> Profile
-              </h3>
-            </header>
-
-            <p>
-              <strong>Token:</strong>{" "}
-              {currentUser.accessToken.substring(0, 20)} ...{" "}
-              {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-            </p>
-            <p>
-              <strong>Id:</strong>{" "}
-              {currentUser.id}
-            </p>
-            
-            <p>
-              <strong>Email:</strong>{" "}
-              {currentUser.email}
-            </p>
-            <strong>Authorities:</strong>
-            <ul>
-              {currentUser.roles &&
-                currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
-            </ul>*/}
           </div>
         ) : (
           <div> 
             <header class="alert alert-warning" style={{border:"1px solid tomato"}}>
             <h3>
               <strong >Not Connected yet !</strong>
+              <br/>
+              <br/>
+              <button className="btn btn-block login-button" ><Link to="/login" style={{textDecoration:"none",color:"white"}}>Login</Link></button>
             </h3>
             </header>
           </div>

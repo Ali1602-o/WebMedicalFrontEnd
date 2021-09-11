@@ -36,30 +36,7 @@ export default class Consultations extends Component {
         return (
 
             <div className="container">
-                <div className="col-md-12" align="center"><h3 id="specia" >Spécialités</h3> </div>
-
-
-                <div class="consultations-specialite-sec1">
-                    <Row>
-                        <div id="specialite-container" className="col-md-4">
-                            <img id="specia-img" src="images/1.jpeg" class="img-rounded" width="130px" height="130px" /><br />
-                            <Link to={"/medecins"} className="specialite-btn">Psychiatre</Link>
-                        </div>
-
-
-                        <div id="specialite-container" className="col-md-4">
-                            <img id="specia-img" src="images/2.jpeg" class="img-rounded" width="130px" height="130px" />
-                            <Link to={"/medecins"} className="specialite-btn">Dermatologue</Link>
-                        </div>
-
-
-                        <div id="specialite-container" className="col-md-4">
-                            <img id="specia-img" src="images/3.jpeg" class="img-rounded" width="130px" height="130px" />
-                            <Link to={"/medecins"} className="specialite-btn">Pédiatre</Link>
-                        </div>
-                    </Row>
-                </div>
-
+                <div className="col-md-12" align="center"><h3 id="specia" >Web Medical</h3> </div>
 
 
 
