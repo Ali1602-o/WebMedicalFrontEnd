@@ -1,5 +1,5 @@
 ### Repository description
-This repository represents the front of the application Web Medical coded in ReactJs
+This repository represents the frontend of the application Web Medical coded in ReactJs
 
 In the project directory, you can run:
 
