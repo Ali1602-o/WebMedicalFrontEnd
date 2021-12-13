@@ -1,8 +1,5 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+### Repository description
+This repository represents the front of the application Web Medical coded in ReactJs
 
 In the project directory, you can run:
 
